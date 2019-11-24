@@ -1,7 +1,12 @@
-import React from 'react'
-import { StyleSheet, View, Text } from 'react-native'
-import { Avatar } from 'react-native-elements'
+import React, { useState } from 'react'
+import { ActivityIndicator, StyleSheet, View, Text } from 'react-native'
+import { useDocument } from 'react-firebase-hooks/firestore'
+import firebase from 'firebase'
 import { withFirebaseHOC } from '../config/Firebase'
+import BlurBackgroundWithAvatar from '../components/BlurBackgroundWithAvatar'
+
+const backgroundUrl = 'https://s3.amazonaws.com/uifaces/faces/twitter/ladylexy/128.jpg'
+const avatarUrl = 'https://s3.amazonaws.com/uifaces/faces/twitter/ladylexy/128.jpg'
 
 const styles = StyleSheet.create({
   container: {
@@ -12,34 +17,38 @@ const styles = StyleSheet.create({
   },
   topWrapper: {
     flex: 1,
-    justifyContent: 'center',
-    alignItems: 'center',
-    backgroundColor: 'red',
     width: '100%',
   },
   bottomWrapper: {
     flex: 1,
     justifyContent: 'center',
     alignItems: 'center',
-    backgroundColor: 'blue',
     width: '100%',
   },
 })
 
-function Profile() {
+function Profile(props) {
+  const [value, loading, error] = useDocument(
+    firebase.firestore().doc(`users/${props.firebase.currentUser().uid}`),
+    {
+      snapshotListenOptions: { includeMetadataChanges: true },
+    }
+  )
+
   return (
     <View style={styles.container}>
       <View style={styles.topWrapper}>
-        <Avatar
-          rounded
-          size="xlarge"
-          source={{
-            uri: 'https://s3.amazonaws.com/uifaces/faces/twitter/ladylexy/128.jpg',
-          }}
-        />
+        {value && (
+          <BlurBackgroundWithAvatar
+            backgroundUrl={value.data().imageProfile}
+            avatarUrl={value.data().imageProfile}
+            title={value.data().name}
+            subtitle={value.data().position}
+          />
+        )}
       </View>
       <View style={styles.bottomWrapper}>
-        <Text>Profile</Text>
+        {loading && <ActivityIndicator size="large" color="#0000ff" />}
       </View>
     </View>
   )

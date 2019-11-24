@@ -1,17 +1,17 @@
-import React from "react";
-import { StyleSheet, Text, View } from "react-native";
-import { Button } from "react-native-elements";
-import { withFirebaseHOC } from "../config/Firebase";
+import React from 'react'
+import { StyleSheet, Text, View } from 'react-native'
+import { Button } from 'react-native-elements'
+import { withFirebaseHOC } from '../config/Firebase'
 
 function Home(props) {
   const handleSignout = async () => {
     try {
-      await props.firebase.signOut();
-      props.navigation.navigate("Auth");
+      await props.firebase.signOut()
+      props.navigation.navigate('Auth')
     } catch (error) {
-      console.log(error);
+      console.log(error)
     }
-  };
+  }
   return (
     <View style={styles.container}>
       <Text>Home</Text>
@@ -20,21 +20,21 @@ function Home(props) {
         title="Signout"
         onPress={handleSignout}
         titleStyle={{
-          color: "#F57C00"
+          color: '#F57C00',
         }}
         type="clear"
       />
     </View>
-  );
+  )
 }
 
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: "#fff",
-    alignItems: "center",
-    justifyContent: "center"
-  }
-});
+    backgroundColor: '#fff',
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+})
 
-export default withFirebaseHOC(Home);
+export default withFirebaseHOC(Home)

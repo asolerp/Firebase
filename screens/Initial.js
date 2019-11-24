@@ -5,6 +5,8 @@ import { AppLoading } from 'expo'
 import { Asset } from 'expo-asset'
 import * as Font from 'expo-font'
 import * as Icon from '@expo/vector-icons'
+import { useDocument } from 'react-firebase-hooks/firestore'
+import firebase from 'firebase'
 import { withFirebaseHOC } from '../config/Firebase'
 
 function Initial(props) {
@@ -19,7 +21,7 @@ function Initial(props) {
         await props.firebase.checkUserAuth(user => {
           if (user) {
             // if the user has previously logged in
-            props.navigation.navigate('App')
+            props.navigation.navigate('ProfileForm')
           } else {
             // if the user has previously signed out from the app
             props.navigation.navigate('Auth')

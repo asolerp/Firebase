@@ -32,6 +32,13 @@ const Firebase = {
       .doc(`${userData.uid}`)
       .set(userData)
   },
+  getUserProfile: id => {
+    return firebase
+      .firestore()
+      .collection('users')
+      .doc(`${id}`)
+      .get()
+  },
 }
 
 export default Firebase
