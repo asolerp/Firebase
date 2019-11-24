@@ -8,6 +8,11 @@
     "eject": "expo eject"
   },
   "dependencies": {
+    "@expo/vector-icons": "^10.0.6",
+    "babel-eslint": "^10.0.3",
+    "eslint-config-airbnb": "^18.0.1",
+    "eslint-plugin-import": "^2.18.2",
+    "eslint-plugin-jsx-a11y": "^6.2.3",
     "expo": "34.0.4",
     "expo-asset": "6.0.0",
     "expo-font": "6.0.1",
@@ -24,10 +29,16 @@
     "react-native-web": "^0.11.4",
     "react-navigation": "4.0.0",
     "react-navigation-stack": "1.5.1",
+    "styled-components": "^4.4.1",
     "yup": "0.27.0"
   },
   "devDependencies": {
-    "babel-preset-expo": "^6.0.0"
+    "babel-preset-expo": "^6.0.0",
+    "eslint": "^6.6.0",
+    "eslint-config-prettier": "^6.7.0",
+    "eslint-plugin-prettier": "^3.1.1",
+    "eslint-plugin-react": "^7.16.0",
+    "prettier": "^1.19.1"
   },
   "private": true
 }

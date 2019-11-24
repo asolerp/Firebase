@@ -20,6 +20,9 @@ const Firebase = {
   checkUserAuth: user => {
     return firebase.auth().onAuthStateChanged(user)
   },
+  currentUser: () => {
+    return firebase.auth().currentUser
+  },
 
   // firestore
   createNewUser: userData => {
@@ -28,7 +31,7 @@ const Firebase = {
       .collection('users')
       .doc(`${userData.uid}`)
       .set(userData)
-  }
+  },
 }
 
 export default Firebase
