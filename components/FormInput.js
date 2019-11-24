@@ -1,7 +1,10 @@
+/* eslint react/prop-types: 0 */
+
 import React from 'react'
 import { Input } from 'react-native-elements'
 import { StyleSheet, View } from 'react-native'
 import { Ionicons } from '@expo/vector-icons'
+import { red } from 'ansi-colors'
 
 const FormInput = ({
   iconName,
@@ -17,7 +20,7 @@ const FormInput = ({
       {...rest}
       leftIcon={<Ionicons name={iconName} size={28} color={iconColor} />}
       leftIconContainerStyle={styles.iconStyle}
-      placeholderTextColor='grey'
+      placeholderTextColor="grey"
       name={name}
       placeholder={placeholder}
       style={styles.input}
@@ -27,11 +30,11 @@ const FormInput = ({
 
 const styles = StyleSheet.create({
   inputContainer: {
-    margin: 15
+    margin: 15,
   },
   iconStyle: {
-    marginRight: 10
-  }
+    marginRight: 10,
+  },
 })
 
 export default FormInput

@@ -1,12 +1,15 @@
-import { createStackNavigator } from 'react-navigation-stack'
-import Home from '../screens/Home'
+import { createBottomTabNavigator } from 'react-navigation-tabs'
 
-const AppNavigation = createStackNavigator(
+import Home from '../screens/Home'
+import Profile from '../screens/Profile'
+
+const AppNavigation = createBottomTabNavigator(
   {
-    Home: { screen: Home }
+    Home: { screen: Home },
+    Profile: { screen: Profile },
   },
   {
-    initialRouteName: 'Home'
+    initialRouteName: 'Home',
   }
 )
 

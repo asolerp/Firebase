@@ -31,12 +31,12 @@ const styles = StyleSheet.create({
 const validationSchema = Yup.object().shape({
   email: Yup.string()
     .label('Email')
-    .email('Enter a valid email')
-    .required('Please enter a registered email'),
+    .email('Introduce un email válido')
+    .required('Introduce una cuenta de email'),
   password: Yup.string()
     .label('Password')
-    .required()
-    .min(6, 'Password must have at least 6 characters '),
+    .required('El password es obligatorio')
+    .min(6, 'El password debe tener como mínimo 6 carácteres '),
 })
 
 function Login(props) {
@@ -46,12 +46,8 @@ function Login(props) {
   const goToSignup = () => props.navigation.navigate('Signup')
 
   const handlePasswordVisibility = () => {
-    setRightIcon(prevState => ({
-      rightIcon: prevState.rightIcon === 'ios-eye' ? 'ios-eye-off' : 'ios-eye',
-    }))
-    setPasswordVisibility(prevState => ({
-      passwordVisibility: !prevState.passwordVisibility,
-    }))
+    setRightIcon(prevState => (prevState === 'ios-eye' ? 'ios-eye-off' : 'ios-eye'))
+    setPasswordVisibility(prevState => !prevState)
   }
 
   const handleOnLogin = async (values, actions) => {
@@ -96,9 +92,9 @@ function Login(props) {
               name="email"
               value={values.email}
               onChangeText={handleChange('email')}
-              placeholder="Enter email"
+              placeholder="Usuario"
               autoCapitalize="none"
-              iconName="ios-mail"
+              iconName="ios-person"
               iconColor="#2C384A"
               onBlur={handleBlur('email')}
             />
@@ -107,7 +103,7 @@ function Login(props) {
               name="password"
               value={values.password}
               onChangeText={handleChange('password')}
-              placeholder="Enter password"
+              placeholder="Password"
               secureTextEntry={passwordVisibility}
               iconName="ios-lock"
               iconColor="#2C384A"
@@ -134,7 +130,7 @@ function Login(props) {
         )}
       </Formik>
       <Button
-        title="Don't have an account? Sign Up"
+        title="Aun no tienes una cuenta? Registrate!"
         onPress={goToSignup}
         titleStyle={{
           color: '#F57C00',

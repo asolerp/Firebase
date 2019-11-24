@@ -1,3 +1,5 @@
+/* eslint react/prop-types: 0 */
+
 import React, { useState, useEffect } from 'react'
 import { AppLoading } from 'expo'
 import { Asset } from 'expo-asset'
@@ -32,7 +34,7 @@ function Initial(props) {
 
   const loadLocalAsync = async () => {
     await Promise.all([
-      Asset.loadAsync([require('../assets/flame.png'), require('../assets/icon.png')]),
+      Asset.loadAsync([require('../assets/panama.png'), require('../assets/icon.png')]),
       Font.loadAsync({
         ...Icon.Ionicons.font,
       }),
