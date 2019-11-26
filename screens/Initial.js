@@ -20,11 +20,12 @@ function Initial(props) {
 
         await props.firebase.checkUserAuth(async user => {
           if (user) {
-            // if the user has previously logged in
             const userProfile = await props.firebase.getUserProfile(user.uid)
             if (userProfile.data().firstLogin) {
+              // if first logged in
               props.navigation.navigate('ProfileForm')
             } else {
+              // if the user has previously logged in
               props.navigation.navigate('App')
             }
           } else {
