@@ -31,7 +31,7 @@ function BlurBackgroundWithAvatar(props) {
       source={{
         uri: props.backgroundUrl,
       }}
-      blurRadius={4}
+      blurRadius={3}
       style={styles.container}
     >
       <View style={styles.topBackgroundImage}>
