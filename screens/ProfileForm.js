@@ -1,27 +1,22 @@
-import React, { useState } from 'react'
-import { SafeAreaView, StyleSheet, View, Text } from 'react-native'
+import React, { useState, useEffect } from 'react'
+import { SafeAreaView, StyleSheet, View, Alert } from 'react-native'
 import { Formik } from 'formik'
 import { HideWithKeyboard } from 'react-native-hide-with-keyboard'
 import Constants from 'expo-constants'
 import * as ImagePicker from 'expo-image-picker'
 import * as Yup from 'yup'
 import { Avatar } from 'react-native-elements'
+import * as Permissions from 'expo-permissions'
 import { withFirebaseHOC } from '../config/Firebase'
 import FormInput from '../components/FormInput'
 import FormButton from '../components/FormButton'
+// import FormSelect from '../components/FormSelect'
 import ErrorMessage from '../components/ErrorMessage'
-import React, { useState, useEffect } from 'react'
-import { StyleSheet, Alert, View, Text, Image } from 'react-native'
-import { Avatar } from 'react-native-elements'
-import * as ImagePicker from 'expo-image-picker'
-import Constants from 'expo-constants'
-import * as Permissions from 'expo-permissions'
-import FormSelect from '../components/FormSelect'
 
-const positions = [
-  { label: 'Delantero', value: 'DC' },
-  { label: 'Medio Centro', value: 'MC' },
-]
+// const positions = [
+//   { label: 'Delantero', value: 'DC' },
+//   { label: 'Medio Centro', value: 'MC' },
+// ]
 
 const styles = StyleSheet.create({
   container: {
@@ -47,11 +42,10 @@ function ProfileForm() {
   const [imgProfile, setImgProfile] = useState(
     'http://s3.amazonaws.com/37assets/svn/765-default-avatar.png'
   )
-  const [value, setValue] = useState('')
+  // const [value, setValue] = useState('')
 
   useEffect(() => {
     getPermissionAsync()
-    console.log('hola')
   }, [])
 
   const pickImage = async () => {
@@ -67,10 +61,10 @@ function ProfileForm() {
   }
 
   const validationSchema = Yup.object().shape({
-    posicion: Yup.string()
-      .label('Posicion')
-      .oneOf(['Delantero', 'Medio', 'Defensa', 'Portero'])
-      .required('Introduce una posición'),
+    // posicion: Yup.string()
+    //   .label('Posicion')
+    //   .oneOf(['Delantero', 'Medio', 'Defensa', 'Portero'])
+    //   .required('Introduce una posición'),
     age: Yup.number()
       .label('Edad')
       .required('La edad es obligatoria'),
@@ -80,10 +74,10 @@ function ProfileForm() {
     weight: Yup.number()
       .label('Edad')
       .required('La edad es obligatoria'),
-    foot: Yup.number()
-      .label('Pie')
-      .oneOf(['Diestro', 'Zurdo', 'Ambidiestro'])
-      .required('Introduce tu pierna buena'),
+    // foot: Yup.number()
+    //   .label('Pie')
+    //   .oneOf(['Diestro', 'Zurdo', 'Ambidiestro'])
+    //   .required('Introduce tu pierna buena'),
   })
 
   return (
@@ -101,9 +95,10 @@ function ProfileForm() {
       </HideWithKeyboard>
       <View style={styles.formWrapper}>
         <Formik
-          initialValues={{ email: '', password: '' }}
+          initialValues={{ age: '', height: '', weight: '' }}
           onSubmit={(values, actions) => {
-            handleOnLogin(values, actions)
+            console.log(values, actions)
+            // handleOnLogin(values, actions)
           }}
           validationSchema={validationSchema}
         >
@@ -128,7 +123,7 @@ function ProfileForm() {
                 iconColor="#2C384A"
                 onBlur={handleBlur('age')}
               />
-              <ErrorMessage errorValue={touched.email && errors.email} />
+              <ErrorMessage errorValue={touched.age && errors.age} />
               <FormInput
                 name="height"
                 value={values.password}
@@ -138,6 +133,7 @@ function ProfileForm() {
                 iconColor="#2C384A"
                 onBlur={handleBlur('height')}
               />
+              <ErrorMessage errorValue={touched.height && errors.height} />
               <FormInput
                 name="weight"
                 value={values.password}
@@ -147,7 +143,7 @@ function ProfileForm() {
                 iconColor="#2C384A"
                 onBlur={handleBlur('weight')}
               />
-              <ErrorMessage errorValue={touched.password && errors.password} />
+              <ErrorMessage errorValue={touched.weight && errors.weight} />
               <View style={styles.buttonContainer}>
                 <FormButton
                   buttonType="outline"
