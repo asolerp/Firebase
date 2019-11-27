@@ -32,12 +32,61 @@ const Firebase = {
       .doc(`${userData.uid}`)
       .set(userData)
   },
+
+  updateUserProfile: userData => {
+    return firebase
+      .firestore()
+      .collection('users')
+      .doc(`${userData.uid}`)
+      .set(userData)
+  },
+
   getUserProfile: id => {
     return firebase
       .firestore()
       .collection('users')
       .doc(`${id}`)
       .get()
+  },
+
+  // storage
+  uriToBlob: uri => {
+    return new Promise((resolve, reject) => {
+      const xhr = new XMLHttpRequest()
+      xhr.onload = function() {
+        // return the blob
+        resolve(xhr.response)
+      }
+
+      xhr.onerror = function() {
+        // something went wrong
+        reject(new Error('uriToBlob failed'))
+      }
+      // this helps us get a blob
+      xhr.responseType = 'blob'
+
+      xhr.open('GET', uri, true)
+      xhr.send(null)
+    })
+  },
+
+  uploadToFirebase: (blob, userUID, name) => {
+    return new Promise((resolve, reject) => {
+      const storageRef = firebase.storage().ref()
+      storageRef
+        .child(`players/${userUID}/${name}.jpg`)
+        .put(blob, {
+          contentType: 'image/jpeg',
+        })
+        .then(snapshot => {
+          blob.close()
+          resolve(snapshot)
+        })
+        .catch(error => {
+          console.log(error)
+          reject(error)
+        })
+    })
   },
 }
 

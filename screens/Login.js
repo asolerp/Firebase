@@ -12,6 +12,7 @@ import FormButton from '../components/FormButton'
 import ErrorMessage from '../components/ErrorMessage'
 import AppLogo from '../components/AppLogo'
 import { withFirebaseHOC } from '../config/Firebase'
+import { useStateValue } from '../config/User/UserContextManagement'
 
 const styles = StyleSheet.create({
   container: {
@@ -42,6 +43,7 @@ const validationSchema = Yup.object().shape({
 function Login(props) {
   const [passwordVisibility, setPasswordVisibility] = useState(true)
   const [rightIcon, setRightIcon] = useState('ios-eye')
+  const [{ user }, dispatch] = useStateValue()
 
   const goToSignup = () => props.navigation.navigate('Signup')
 
@@ -54,8 +56,12 @@ function Login(props) {
     const { email, password } = values
     try {
       const response = await props.firebase.loginWithEmail(email, password)
-
       if (response.user) {
+        const userProfile = await props.firebase.getUserProfile(response.user.uid)
+        dispatch({
+          type: 'updateProfile',
+          userProfile: userProfile.data(),
+        })
         props.navigation.navigate('App')
       }
     } catch (error) {

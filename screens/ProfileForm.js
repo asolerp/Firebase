@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react'
-import { SafeAreaView, StyleSheet, View, Alert } from 'react-native'
+import { SafeAreaView, StyleSheet, View, Text, Alert } from 'react-native'
 import { Formik } from 'formik'
 import { HideWithKeyboard } from 'react-native-hide-with-keyboard'
 import Constants from 'expo-constants'
@@ -10,14 +10,21 @@ import * as Permissions from 'expo-permissions'
 import { withFirebaseHOC } from '../config/Firebase'
 import FormInput from '../components/FormInput'
 import FormButton from '../components/FormButton'
-import FormSelect from '../components/FormSelect'
+// import FormSelect from '../components/FormSelect'
 import ErrorMessage from '../components/ErrorMessage'
+import { useStateValue } from '../config/User/UserContextManagement'
 
 const positions = [
   { label: 'Delantero', value: 'dc' },
   { label: 'Medio Centro', value: 'mc' },
   { label: 'Defensa', value: 'df' },
   { label: 'Portero', value: 'pt' },
+]
+
+const foot = [
+  { label: 'Diestro', value: 'd' },
+  { label: 'Zurdo', value: 'z' },
+  { label: 'Ambidiestro', value: 'ad' },
 ]
 
 const styles = StyleSheet.create({
@@ -28,6 +35,9 @@ const styles = StyleSheet.create({
   },
   formWrapper: {
     width: '100%',
+  },
+  avatar: {
+    marginBottom: 10,
   },
 })
 
@@ -40,12 +50,13 @@ const getPermissionAsync = async () => {
   }
 }
 
-function ProfileForm() {
-  const [imgProfile, setImgProfile] = useState(
-    'http://s3.amazonaws.com/37assets/svn/765-default-avatar.png'
-  )
-
+function ProfileForm(props) {
+  const [blob, setBlob] = useState()
   const [position, setPosition] = useState('dc')
+  const [mainFoot, setMainFoot] = useState('d')
+  const [{ user }, dispatch] = useStateValue()
+
+  const [imgProfile, setImgProfile] = useState(user.imgProfile)
 
   useEffect(() => {
     getPermissionAsync()
@@ -64,10 +75,6 @@ function ProfileForm() {
   }
 
   const validationSchema = Yup.object().shape({
-    position: Yup.string()
-      .label('Posicion')
-      .oneOf(['dc', 'mc'])
-      .required('Introduce una posición'),
     age: Yup.number()
       .label('Edad')
       .required('La edad es obligatoria'),
@@ -77,9 +84,13 @@ function ProfileForm() {
     weight: Yup.number()
       .label('Edad')
       .required('La edad es obligatoria'),
+    // position: Yup.string()
+    //   .label('Posicion')
+    //   .oneOf(['dc', 'mc'])
+    //   .required('Introduce una posición'),
     // foot: Yup.number()
     //   .label('Pie')
-    //   .oneOf(['Diestro', 'Zurdo', 'Ambidiestro'])
+    //   .oneOf(['d', 'z', 'ad'])
     //   .required('Introduce tu pierna buena'),
   })
 
@@ -89,18 +100,29 @@ function ProfileForm() {
         <Avatar
           rounded
           size="xlarge"
+          containerStyle={styles.avatar}
           showEditButton
           onEditPress={() => pickImage()}
           source={{
             uri: imgProfile,
           }}
         />
+        <Text>{user.email}</Text>
       </HideWithKeyboard>
       <View style={styles.formWrapper}>
         <Formik
           initialValues={{ age: '', height: '', weight: '' }}
           onSubmit={(values, actions) => {
             console.log(values, actions)
+            const { uid } = props.firebase.currentUser()
+            props.firebase
+              .uriToBlob(imgProfile)
+              .then(blob => props.firebase.uploadToFirebase(blob, uid))
+              .then(snapshot => snapshot.ref.getDownloadURL())
+              .then(downloadURL =>
+                props.firebase.updateUserProfile({ ...userData, uid, imgProfile: downloadURL })
+              )
+
             // handleOnLogin(values, actions)
           }}
           validationSchema={validationSchema}
@@ -148,7 +170,7 @@ function ProfileForm() {
                 onBlur={handleBlur('weight')}
               />
               <ErrorMessage errorValue={touched.weight && errors.weight} />
-              <FormSelect
+              {/* <FormSelect
                 selectedValue={position}
                 mode="dropdown"
                 prompt="Seleccionar posición"
@@ -158,6 +180,16 @@ function ProfileForm() {
                   setPosition(itemValue)
                 }}
               />
+              <FormSelect
+                selectedValue={mainFoot}
+                mode="dropdown"
+                prompt="Pierna principal"
+                values={foot}
+                onValueChange={itemValue => {
+                  setFieldValue('foot', itemValue)
+                  setMainFoot(itemValue)
+                }}
+              /> */}
               <View style={styles.buttonContainer}>
                 <FormButton
                   buttonType="outline"

@@ -33,17 +33,20 @@ const styles = StyleSheet.create({
     borderWidth: 1,
     borderColor: '#aaaaaa',
     padding: 0,
-    margin: 0,
+    marginLeft: 15,
+    marginRight: 15,
+    marginTop: 10,
+    marginBottom: 10,
   },
   inputStyle: {
-    backgroundColor: 'red',
     borderBottomWidth: 0,
     marginRight: 0,
     padding: 0,
     margin: 0,
   },
   iconStyle: {
-    marginRight: 10,
+    marginRight: 15,
+    marginLeft: 0,
   },
   rightSymbol: {
     backgroundColor: 'black',
