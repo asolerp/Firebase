@@ -2,9 +2,8 @@
 
 import React from 'react'
 import { Input } from 'react-native-elements'
-import { StyleSheet, View } from 'react-native'
+import { StyleSheet, View, Text } from 'react-native'
 import { Ionicons } from '@expo/vector-icons'
-import { red } from 'ansi-colors'
 
 const FormInput = ({
   iconName,
@@ -15,9 +14,10 @@ const FormInput = ({
   placeholder,
   ...rest
 }) => (
-  <View style={styles.inputContainer}>
+  <View style={styles.inputWrapper}>
     <Input
       {...rest}
+      inputContainerStyle={styles.inputStyle}
       leftIcon={<Ionicons name={iconName} size={28} color={iconColor} />}
       leftIconContainerStyle={styles.iconStyle}
       placeholderTextColor="grey"
@@ -29,11 +29,24 @@ const FormInput = ({
 )
 
 const styles = StyleSheet.create({
-  inputContainer: {
-    margin: 15,
+  inputWrapper: {
+    borderWidth: 1,
+    borderColor: '#aaaaaa',
+    padding: 0,
+    margin: 0,
+  },
+  inputStyle: {
+    backgroundColor: 'red',
+    borderBottomWidth: 0,
+    marginRight: 0,
+    padding: 0,
+    margin: 0,
   },
   iconStyle: {
     marginRight: 10,
+  },
+  rightSymbol: {
+    backgroundColor: 'black',
   },
 })
 

@@ -10,13 +10,15 @@ import * as Permissions from 'expo-permissions'
 import { withFirebaseHOC } from '../config/Firebase'
 import FormInput from '../components/FormInput'
 import FormButton from '../components/FormButton'
-// import FormSelect from '../components/FormSelect'
+import FormSelect from '../components/FormSelect'
 import ErrorMessage from '../components/ErrorMessage'
 
-// const positions = [
-//   { label: 'Delantero', value: 'DC' },
-//   { label: 'Medio Centro', value: 'MC' },
-// ]
+const positions = [
+  { label: 'Delantero', value: 'dc' },
+  { label: 'Medio Centro', value: 'mc' },
+  { label: 'Defensa', value: 'df' },
+  { label: 'Portero', value: 'pt' },
+]
 
 const styles = StyleSheet.create({
   container: {
@@ -42,7 +44,8 @@ function ProfileForm() {
   const [imgProfile, setImgProfile] = useState(
     'http://s3.amazonaws.com/37assets/svn/765-default-avatar.png'
   )
-  // const [value, setValue] = useState('')
+
+  const [position, setPosition] = useState('dc')
 
   useEffect(() => {
     getPermissionAsync()
@@ -61,10 +64,10 @@ function ProfileForm() {
   }
 
   const validationSchema = Yup.object().shape({
-    // posicion: Yup.string()
-    //   .label('Posicion')
-    //   .oneOf(['Delantero', 'Medio', 'Defensa', 'Portero'])
-    //   .required('Introduce una posición'),
+    position: Yup.string()
+      .label('Posicion')
+      .oneOf(['dc', 'mc'])
+      .required('Introduce una posición'),
     age: Yup.number()
       .label('Edad')
       .required('La edad es obligatoria'),
@@ -106,6 +109,7 @@ function ProfileForm() {
             handleChange,
             values,
             handleSubmit,
+            setFieldValue,
             errors,
             isValid,
             touched,
@@ -144,14 +148,24 @@ function ProfileForm() {
                 onBlur={handleBlur('weight')}
               />
               <ErrorMessage errorValue={touched.weight && errors.weight} />
+              <FormSelect
+                selectedValue={position}
+                mode="dropdown"
+                prompt="Seleccionar posición"
+                values={positions}
+                onValueChange={itemValue => {
+                  setFieldValue('position', itemValue)
+                  setPosition(itemValue)
+                }}
+              />
               <View style={styles.buttonContainer}>
                 <FormButton
                   buttonType="outline"
                   onPress={handleSubmit}
                   title="LOGIN"
                   buttonColor="#039BE5"
-                  disabled={!isValid || isSubmitting}
-                  loading={isSubmitting}
+                  disabled={!isValid}
+                  // loading={isSubmitting}
                 />
               </View>
               <ErrorMessage errorValue={errors.general} />

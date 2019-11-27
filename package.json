@@ -21,6 +21,7 @@
     "expo-permissions": "^7.0.0",
     "firebase": "6.6.0",
     "formik": "1.5.8",
+    "native-base": "^2.13.8",
     "react": "16.8.3",
     "react-dom": "^16.8.6",
     "react-firebase-hooks": "^2.1.1",
