@@ -10,7 +10,7 @@ import * as Permissions from 'expo-permissions'
 import { withFirebaseHOC } from '../config/Firebase'
 import FormInput from '../components/FormInput'
 import FormButton from '../components/FormButton'
-// import FormSelect from '../components/FormSelect'
+import FormSelect from '../components/FormSelect'
 import ErrorMessage from '../components/ErrorMessage'
 import { useStateValue } from '../config/User/UserContextManagement'
 
@@ -51,11 +51,7 @@ const getPermissionAsync = async () => {
 }
 
 function ProfileForm(props) {
-  const [blob, setBlob] = useState()
-  const [position, setPosition] = useState('dc')
-  const [mainFoot, setMainFoot] = useState('d')
   const [{ user }, dispatch] = useStateValue()
-
   const [imgProfile, setImgProfile] = useState(user.imgProfile)
 
   useEffect(() => {
@@ -84,14 +80,8 @@ function ProfileForm(props) {
     weight: Yup.number()
       .label('Edad')
       .required('La edad es obligatoria'),
-    // position: Yup.string()
-    //   .label('Posicion')
-    //   .oneOf(['dc', 'mc'])
-    //   .required('Introduce una posición'),
-    // foot: Yup.number()
-    //   .label('Pie')
-    //   .oneOf(['d', 'z', 'ad'])
-    //   .required('Introduce tu pierna buena'),
+    position: Yup.string().required('Position requerida'),
+    foot: Yup.string().required('Pie requerido'),
   })
 
   return (
@@ -113,15 +103,24 @@ function ProfileForm(props) {
         <Formik
           initialValues={{ age: '', height: '', weight: '' }}
           onSubmit={(values, actions) => {
-            console.log(values, actions)
+            const { age, height, weight, position, foot } = values
             const { uid } = props.firebase.currentUser()
+            console.log('hola')
             props.firebase
               .uriToBlob(imgProfile)
-              .then(blob => props.firebase.uploadToFirebase(blob, uid))
+              .then(blob => props.firebase.uploadToFirebase(blob, uid, 'profile'))
               .then(snapshot => snapshot.ref.getDownloadURL())
-              .then(downloadURL =>
-                props.firebase.updateUserProfile({ ...userData, uid, imgProfile: downloadURL })
-              )
+              .then(downloadURL => {
+                const userData = {
+                  age,
+                  height,
+                  weight,
+                  position,
+                  foot,
+                  imgProfile: downloadURL,
+                }
+                return props.firebase.updateUserProfile(userData)
+              })
 
             // handleOnLogin(values, actions)
           }}
@@ -170,33 +169,27 @@ function ProfileForm(props) {
                 onBlur={handleBlur('weight')}
               />
               <ErrorMessage errorValue={touched.weight && errors.weight} />
-              {/* <FormSelect
-                selectedValue={position}
+              <FormSelect
+                selectedValue={values.position}
                 mode="dropdown"
                 prompt="Seleccionar posición"
                 values={positions}
-                onValueChange={itemValue => {
-                  setFieldValue('position', itemValue)
-                  setPosition(itemValue)
-                }}
+                onValueChange={itemValue => setFieldValue('position', itemValue)}
               />
               <FormSelect
-                selectedValue={mainFoot}
+                selectedValue={values.foot}
                 mode="dropdown"
                 prompt="Pierna principal"
                 values={foot}
-                onValueChange={itemValue => {
-                  setFieldValue('foot', itemValue)
-                  setMainFoot(itemValue)
-                }}
-              /> */}
+                onValueChange={itemValue => setFieldValue('foot', itemValue)}
+              />
               <View style={styles.buttonContainer}>
                 <FormButton
                   buttonType="outline"
                   onPress={handleSubmit}
                   title="LOGIN"
                   buttonColor="#039BE5"
-                  disabled={!isValid}
+                  // disabled={!isValid}
                   // loading={isSubmitting}
                 />
               </View>
