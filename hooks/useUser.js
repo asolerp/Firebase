@@ -2,11 +2,10 @@ import React, { useEffect } from 'react'
 import firebase from 'firebase'
 
 function useUser(id) {
-  console.log(id)
   // initialize our default state
   const [error, setError] = React.useState(false)
   const [loading, setLoading] = React.useState(true)
-  const [recipe, setRecipe] = React.useState(null)
+  const [user, setUser] = React.useState(null)
   // when the id attribute changes (including mount)
   // subscribe to the recipe document and update
   // our state when it changes.
@@ -18,7 +17,7 @@ function useUser(id) {
       .onSnapshot(
         doc => {
           setLoading(false)
-          setRecipe(doc)
+          setUser(doc)
         },
         err => {
           setError(err)
@@ -33,7 +32,7 @@ function useUser(id) {
   return {
     error,
     loading,
-    recipe,
+    user,
   }
 }
 

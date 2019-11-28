@@ -6,6 +6,11 @@ import useUser from '../hooks/useUser'
 
 function Home(props) {
   const { error, loading, user } = useUser(props.firebase.currentUser().uid)
+
+  if (user) {
+    console.log('usuaro', user.data())
+  }
+
   const handleSignout = async () => {
     try {
       await props.firebase.signOut()
@@ -17,7 +22,7 @@ function Home(props) {
   return (
     <View style={styles.container}>
       <Text>Home</Text>
-      <Text>{user && user.data().name}</Text>
+      <Text>{user && user.snapshot}</Text>
       <Button
         title="Signout"
         onPress={handleSignout}
