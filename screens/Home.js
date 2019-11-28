@@ -2,8 +2,10 @@ import React from 'react'
 import { StyleSheet, Text, View } from 'react-native'
 import { Button } from 'react-native-elements'
 import { withFirebaseHOC } from '../config/Firebase'
+import useUser from '../hooks/useUser'
 
 function Home(props) {
+  const { error, loading, user } = useUser(props.firebase.currentUser().uid)
   const handleSignout = async () => {
     try {
       await props.firebase.signOut()
@@ -15,7 +17,7 @@ function Home(props) {
   return (
     <View style={styles.container}>
       <Text>Home</Text>
-      <Text>{props.firebase.currentUser().uid}</Text>
+      <Text>{user && user.data().name}</Text>
       <Button
         title="Signout"
         onPress={handleSignout}

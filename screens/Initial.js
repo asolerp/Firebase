@@ -8,9 +8,11 @@ import * as Icon from '@expo/vector-icons'
 import { useDocument } from 'react-firebase-hooks/firestore'
 import firebase from 'firebase'
 import { withFirebaseHOC } from '../config/Firebase'
+import { useStateValue } from '../config/User/UserContextManagement'
 
 function Initial(props) {
   const [isAssetsLoadingComplete, setIsAssetsLoadingComplete] = useState(false)
+  const [{ user }, dispatch] = useStateValue()
 
   useEffect(() => {
     async function checkStatusAuth() {
@@ -21,6 +23,10 @@ function Initial(props) {
         await props.firebase.checkUserAuth(async user => {
           if (user) {
             const userProfile = await props.firebase.getUserProfile(user.uid)
+            dispatch({
+              type: 'updateProfile',
+              userProfile: userProfile.data(),
+            })
             if (userProfile.data().firstLogin) {
               // if first logged in
               props.navigation.navigate('ProfileForm')

@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react'
-import { SafeAreaView, StyleSheet, View, Text, Alert } from 'react-native'
+import { ScrollView, SafeAreaView, StyleSheet, View, Text, Alert } from 'react-native'
 import { Formik } from 'formik'
 import { HideWithKeyboard } from 'react-native-hide-with-keyboard'
 import Constants from 'expo-constants'
@@ -37,6 +37,7 @@ const styles = StyleSheet.create({
     width: '100%',
   },
   avatar: {
+    marginTop: 15,
     marginBottom: 10,
   },
 })
@@ -71,13 +72,16 @@ function ProfileForm(props) {
   }
 
   const validationSchema = Yup.object().shape({
-    age: Yup.number()
+    name: Yup.string()
+      .label('Nombre')
+      .required('El nombre es obligatoria'),
+    age: Yup.string()
       .label('Edad')
       .required('La edad es obligatoria'),
-    height: Yup.number()
+    height: Yup.string()
       .label('Edad')
       .required('La edad es obligatoria'),
-    weight: Yup.number()
+    weight: Yup.string()
       .label('Edad')
       .required('La edad es obligatoria'),
     position: Yup.string().required('Position requerida'),
@@ -85,120 +89,135 @@ function ProfileForm(props) {
   })
 
   return (
-    <SafeAreaView style={styles.container}>
-      <HideWithKeyboard>
-        <Avatar
-          rounded
-          size="xlarge"
-          containerStyle={styles.avatar}
-          showEditButton
-          onEditPress={() => pickImage()}
-          source={{
-            uri: imgProfile,
-          }}
-        />
-        <Text>{user.email}</Text>
-      </HideWithKeyboard>
-      <View style={styles.formWrapper}>
-        <Formik
-          initialValues={{ age: '', height: '', weight: '' }}
-          onSubmit={(values, actions) => {
-            const { age, height, weight, position, foot } = values
-            const { uid } = props.firebase.currentUser()
-            console.log('hola')
-            props.firebase
-              .uriToBlob(imgProfile)
-              .then(blob => props.firebase.uploadToFirebase(blob, uid, 'profile'))
-              .then(snapshot => snapshot.ref.getDownloadURL())
-              .then(downloadURL => {
-                const userData = {
-                  age,
-                  height,
-                  weight,
-                  position,
-                  foot,
-                  imgProfile: downloadURL,
-                }
-                return props.firebase.updateUserProfile(userData)
-              })
-
-            // handleOnLogin(values, actions)
-          }}
-          validationSchema={validationSchema}
-        >
-          {({
-            handleChange,
-            values,
-            handleSubmit,
-            setFieldValue,
-            errors,
-            isValid,
-            touched,
-            handleBlur,
-            isSubmitting,
-          }) => (
-            <>
-              <FormInput
-                name="age"
-                value={values.age}
-                onChangeText={handleChange('age')}
-                placeholder="Edad"
-                autoCapitalize="none"
-                iconName="ios-person"
-                iconColor="#2C384A"
-                onBlur={handleBlur('age')}
-              />
-              <ErrorMessage errorValue={touched.age && errors.age} />
-              <FormInput
-                name="height"
-                value={values.password}
-                onChangeText={handleChange('height')}
-                placeholder="Altura"
-                iconName="ios-lock"
-                iconColor="#2C384A"
-                onBlur={handleBlur('height')}
-              />
-              <ErrorMessage errorValue={touched.height && errors.height} />
-              <FormInput
-                name="weight"
-                value={values.password}
-                onChangeText={handleChange('weight')}
-                placeholder="Peso"
-                iconName="ios-lock"
-                iconColor="#2C384A"
-                onBlur={handleBlur('weight')}
-              />
-              <ErrorMessage errorValue={touched.weight && errors.weight} />
-              <FormSelect
-                selectedValue={values.position}
-                mode="dropdown"
-                prompt="Seleccionar posición"
-                values={positions}
-                onValueChange={itemValue => setFieldValue('position', itemValue)}
-              />
-              <FormSelect
-                selectedValue={values.foot}
-                mode="dropdown"
-                prompt="Pierna principal"
-                values={foot}
-                onValueChange={itemValue => setFieldValue('foot', itemValue)}
-              />
-              <View style={styles.buttonContainer}>
-                <FormButton
-                  buttonType="outline"
-                  onPress={handleSubmit}
-                  title="LOGIN"
-                  buttonColor="#039BE5"
-                  // disabled={!isValid}
-                  // loading={isSubmitting}
+    <ScrollView>
+      <SafeAreaView style={styles.container}>
+        <HideWithKeyboard>
+          <Avatar
+            rounded
+            size="xlarge"
+            containerStyle={styles.avatar}
+            showEditButton
+            onEditPress={() => pickImage()}
+            source={{
+              uri: imgProfile,
+            }}
+          />
+          <Text>{user.email}</Text>
+        </HideWithKeyboard>
+        <View style={styles.formWrapper}>
+          <Formik
+            initialValues={{ ...user }}
+            onSubmit={(values, actions) => {
+              const { age, name, height, weight, position, foot } = values
+              const { uid } = props.firebase.currentUser()
+              props.firebase
+                .uriToBlob(imgProfile)
+                .then(blob => props.firebase.uploadToFirebase(blob, uid, 'profile'))
+                .then(snapshot => snapshot.ref.getDownloadURL())
+                .then(downloadURL => {
+                  const userData = {
+                    uid,
+                    name,
+                    age,
+                    height,
+                    weight,
+                    position,
+                    foot,
+                    imgProfile: downloadURL,
+                  }
+                  dispatch({
+                    type: 'updateProfile',
+                    userProfile: userData,
+                  })
+                  return props.firebase.updateUserProfile(userData)
+                })
+            }}
+            validationSchema={validationSchema}
+          >
+            {({
+              handleChange,
+              values,
+              handleSubmit,
+              setFieldValue,
+              errors,
+              isValid,
+              touched,
+              handleBlur,
+              isSubmitting,
+            }) => (
+              <>
+                <FormInput
+                  name="name"
+                  value={values.name}
+                  onChangeText={handleChange('name')}
+                  placeholder="Nombre"
+                  autoCapitalize="none"
+                  iconName="ios-person"
+                  iconColor="#2C384A"
+                  onBlur={handleBlur('name')}
                 />
-              </View>
-              <ErrorMessage errorValue={errors.general} />
-            </>
-          )}
-        </Formik>
-      </View>
-    </SafeAreaView>
+                <ErrorMessage errorValue={touched.name && errors.name} />
+                <FormInput
+                  name="age"
+                  value={values.age}
+                  onChangeText={handleChange('age')}
+                  placeholder="Edad"
+                  autoCapitalize="none"
+                  iconName="ios-person"
+                  iconColor="#2C384A"
+                  onBlur={handleBlur('age')}
+                />
+                <ErrorMessage errorValue={touched.age && errors.age} />
+                <FormInput
+                  name="height"
+                  value={values.height}
+                  onChangeText={handleChange('height')}
+                  placeholder="Altura"
+                  iconName="ios-lock"
+                  iconColor="#2C384A"
+                  onBlur={handleBlur('height')}
+                />
+                <ErrorMessage errorValue={touched.height && errors.height} />
+                <FormInput
+                  name="weight"
+                  value={values.weight}
+                  onChangeText={handleChange('weight')}
+                  placeholder="Peso"
+                  iconName="ios-lock"
+                  iconColor="#2C384A"
+                  onBlur={handleBlur('weight')}
+                />
+                <ErrorMessage errorValue={touched.weight && errors.weight} />
+                <FormSelect
+                  selectedValue={values.position}
+                  mode="dropdown"
+                  prompt="Seleccionar posición"
+                  values={positions}
+                  onValueChange={itemValue => setFieldValue('position', itemValue)}
+                />
+                <FormSelect
+                  selectedValue={values.foot}
+                  mode="dropdown"
+                  prompt="Pierna principal"
+                  values={foot}
+                  onValueChange={itemValue => setFieldValue('foot', itemValue)}
+                />
+                <View style={styles.buttonContainer}>
+                  <FormButton
+                    onPress={handleSubmit}
+                    title="Editar"
+                    buttonColor="#039BE5"
+                    disabled={!isValid}
+                    loading={isSubmitting}
+                  />
+                </View>
+                <ErrorMessage errorValue={errors.general} />
+              </>
+            )}
+          </Formik>
+        </View>
+      </SafeAreaView>
+    </ScrollView>
   )
 }
 

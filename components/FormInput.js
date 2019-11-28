@@ -30,8 +30,6 @@ const FormInput = ({
 
 const styles = StyleSheet.create({
   inputWrapper: {
-    borderWidth: 1,
-    borderColor: '#aaaaaa',
     padding: 0,
     marginLeft: 15,
     marginRight: 15,
@@ -39,7 +37,6 @@ const styles = StyleSheet.create({
     marginBottom: 10,
   },
   inputStyle: {
-    borderBottomWidth: 0,
     marginRight: 0,
     padding: 0,
     margin: 0,
