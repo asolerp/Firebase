@@ -4,9 +4,9 @@ import { Button, CheckBox } from "react-native-elements";
 import { Ionicons } from "@expo/vector-icons";
 import { Formik } from "formik";
 import * as Yup from "yup";
-import FormInput from "../components/FormInput";
-import FormButton from "../components/FormButton";
-import ErrorMessage from "../components/ErrorMessage";
+import FormInput from "../components/form/FormInput";
+import FormButton from "../components/form/FormButton";
+import ErrorMessage from "../components/form/ErrorMessage";
 import { withFirebaseHOC } from "../config/Firebase";
 
 const validationSchema = Yup.object().shape({

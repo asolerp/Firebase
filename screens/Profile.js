@@ -38,6 +38,7 @@ function Profile(props) {
             avatarUrl={user.data().imgProfile}
             title={user.data().name}
             subtitle={user.data().position}
+            size="xlarge"
           />
         )}
       </View>

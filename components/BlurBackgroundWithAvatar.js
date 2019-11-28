@@ -14,6 +14,9 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     backgroundColor: 'rgba(63, 63, 63, .6)',
   },
+  avatar: {
+    marginTop: 30,
+  },
   title: {
     color: 'white',
     fontSize: 20,
@@ -37,7 +40,10 @@ function BlurBackgroundWithAvatar(props) {
       <View style={styles.topBackgroundImage}>
         <Avatar
           rounded
-          size="xlarge"
+          containerStyle={styles.avatar}
+          showEditButton={props.showEditButton}
+          onEditPress={props.onEditPress}
+          size={props.size}
           source={{
             uri: props.avatarUrl,
           }}

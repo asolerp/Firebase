@@ -1,17 +1,16 @@
 import React, { useState, useEffect } from 'react'
 import { ScrollView, SafeAreaView, StyleSheet, View, Text, Alert } from 'react-native'
 import { Formik } from 'formik'
-import { HideWithKeyboard } from 'react-native-hide-with-keyboard'
 import Constants from 'expo-constants'
 import * as ImagePicker from 'expo-image-picker'
 import * as Yup from 'yup'
-import { Avatar } from 'react-native-elements'
 import * as Permissions from 'expo-permissions'
+import BlurBackgroundWithAvatar from '../components/BlurBackgroundWithAvatar'
 import { withFirebaseHOC } from '../config/Firebase'
-import FormInput from '../components/FormInput'
-import FormButton from '../components/FormButton'
-import FormSelect from '../components/FormSelect'
-import ErrorMessage from '../components/ErrorMessage'
+import FormInput from '../components/form/FormInput'
+import FormButton from '../components/form/FormButton'
+import FormSelect from '../components/form/FormSelect'
+import ErrorMessage from '../components/form/ErrorMessage'
 import { useStateValue } from '../config/User/UserContextManagement'
 
 const positions = [
@@ -30,15 +29,25 @@ const foot = [
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    justifyContent: 'center',
     alignItems: 'center',
+    justifyContent: 'center',
+  },
+  topWrapper: {
+    flex: 2,
+    width: '100%',
   },
   formWrapper: {
+    flex: 3,
     width: '100%',
   },
   avatar: {
     marginTop: 15,
     marginBottom: 10,
+  },
+  numericInputs: {
+    width: '100%',
+    flexDirection: 'row',
+    justifyContent: 'flex-start',
   },
 })
 
@@ -89,22 +98,20 @@ function ProfileForm(props) {
   })
 
   return (
-    <ScrollView>
-      <SafeAreaView style={styles.container}>
-        <HideWithKeyboard>
-          <Avatar
-            rounded
-            size="xlarge"
-            containerStyle={styles.avatar}
+    <View style={styles.container}>
+      <View style={styles.topWrapper}>
+        {user && (
+          <BlurBackgroundWithAvatar
+            backgroundUrl={imgProfile}
+            avatarUrl={imgProfile}
             showEditButton
             onEditPress={() => pickImage()}
-            source={{
-              uri: imgProfile,
-            }}
+            size="xlarge"
           />
-          <Text>{user.email}</Text>
-        </HideWithKeyboard>
-        <View style={styles.formWrapper}>
+        )}
+      </View>
+      <View style={styles.formWrapper}>
+        <ScrollView>
           <Formik
             initialValues={{ ...user }}
             onSubmit={(values, actions) => {
@@ -141,7 +148,6 @@ function ProfileForm(props) {
               setFieldValue,
               errors,
               isValid,
-              touched,
               handleBlur,
               isSubmitting,
             }) => (
@@ -150,58 +156,61 @@ function ProfileForm(props) {
                   name="name"
                   value={values.name}
                   onChangeText={handleChange('name')}
-                  placeholder="Nombre"
+                  label="Nombre: "
+                  placeholder="Nombre de jugador"
                   autoCapitalize="none"
-                  iconName="ios-person"
-                  iconColor="#2C384A"
                   onBlur={handleBlur('name')}
                 />
-                <ErrorMessage errorValue={touched.name && errors.name} />
                 <FormInput
                   name="age"
                   value={values.age}
                   onChangeText={handleChange('age')}
+                  label="Edad: "
                   placeholder="Edad"
                   autoCapitalize="none"
-                  iconName="ios-person"
-                  iconColor="#2C384A"
                   onBlur={handleBlur('age')}
                 />
-                <ErrorMessage errorValue={touched.age && errors.age} />
                 <FormInput
                   name="height"
                   value={values.height}
                   onChangeText={handleChange('height')}
+                  label="Altura (cm): "
                   placeholder="Altura"
-                  iconName="ios-lock"
-                  iconColor="#2C384A"
                   onBlur={handleBlur('height')}
                 />
-                <ErrorMessage errorValue={touched.height && errors.height} />
                 <FormInput
                   name="weight"
                   value={values.weight}
                   onChangeText={handleChange('weight')}
-                  placeholder="Peso"
-                  iconName="ios-lock"
-                  iconColor="#2C384A"
+                  label="Peso"
+                  placeholder="Peso (kg)"
                   onBlur={handleBlur('weight')}
                 />
-                <ErrorMessage errorValue={touched.weight && errors.weight} />
-                <FormSelect
-                  selectedValue={values.position}
-                  mode="dropdown"
-                  prompt="Seleccionar posición"
-                  values={positions}
-                  onValueChange={itemValue => setFieldValue('position', itemValue)}
-                />
-                <FormSelect
-                  selectedValue={values.foot}
-                  mode="dropdown"
-                  prompt="Pierna principal"
-                  values={foot}
-                  onValueChange={itemValue => setFieldValue('foot', itemValue)}
-                />
+                <View style={styles.numericInputs}>
+                  <FormSelect
+                    selectedValue={values.position}
+                    label="Posición"
+                    values={positions}
+                    placeholder={{
+                      label: 'Posición',
+                      value: null,
+                      color: '#9EA0A4',
+                    }}
+                    mode="dialog"
+                    onValueChange={itemValue => setFieldValue('position', itemValue)}
+                  />
+                  <FormSelect
+                    selectedValue={values.foot}
+                    placeholder={{
+                      label: 'Pierna principal',
+                      value: null,
+                      color: '#9EA0A4',
+                    }}
+                    label="Pierna"
+                    values={foot}
+                    onValueChange={itemValue => setFieldValue('foot', itemValue)}
+                  />
+                </View>
                 <View style={styles.buttonContainer}>
                   <FormButton
                     onPress={handleSubmit}
@@ -215,9 +224,9 @@ function ProfileForm(props) {
               </>
             )}
           </Formik>
-        </View>
-      </SafeAreaView>
-    </ScrollView>
+        </ScrollView>
+      </View>
+    </View>
   )
 }
 

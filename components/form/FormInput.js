@@ -12,9 +12,11 @@ const FormInput = ({
   keyboardType,
   name,
   placeholder,
+  label,
   ...rest
 }) => (
   <View style={styles.inputWrapper}>
+    <Text style={styles.label}>{label}</Text>
     <Input
       {...rest}
       inputContainerStyle={styles.inputStyle}
@@ -23,6 +25,7 @@ const FormInput = ({
       placeholderTextColor="grey"
       name={name}
       placeholder={placeholder}
+      placeholderStyle={styles.placeholder}
       style={styles.input}
     />
   </View>
@@ -30,16 +33,23 @@ const FormInput = ({
 
 const styles = StyleSheet.create({
   inputWrapper: {
+    flex: 1,
+    flexDirection: 'row',
+    alignContent: 'center',
+    alignItems: 'center',
     padding: 0,
-    marginLeft: 15,
-    marginRight: 15,
-    marginTop: 10,
-    marginBottom: 10,
+    borderBottomWidth: 1,
+    borderBottomColor: '#aaaaaa',
   },
   inputStyle: {
     marginRight: 0,
+    borderBottomWidth: 0,
     padding: 0,
     margin: 0,
+  },
+  input: {
+    fontSize: 10,
+    justifyContent: 'flex-end',
   },
   iconStyle: {
     marginRight: 15,
@@ -47,6 +57,17 @@ const styles = StyleSheet.create({
   },
   rightSymbol: {
     backgroundColor: 'black',
+  },
+  label: {
+    fontWeight: '400',
+    color: '#B6B6B6',
+    marginLeft: 10,
+    fontSize: 15,
+    width: '30%',
+  },
+  placeholder: {
+    fontSize: 10,
+    color: '#aaaaaa',
   },
 })
 
