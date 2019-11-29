@@ -1,4 +1,5 @@
-import React from 'react'
+import React, { useEffect, useState } from 'react'
+import * as Font from 'expo-font'
 import AppContainer from './navigation'
 import Firebase, { FirebaseProvider } from './config/Firebase'
 import { UserProvider } from './config/User/UserContextManagement'
@@ -22,10 +23,19 @@ const userReducer = (state, action) => {
 }
 
 export default function App() {
+  const [fontLoaded, setFontLoaded] = useState(false)
+  useEffect(async () => {
+    await Font.loadAsync({
+      montserrat: require('./assets/fonts/Montserrat-Regular.ttf'),
+      'montserrat-light': require('./assets/fonts/Montserrat-ExtraLight.ttf'),
+    })
+    setFontLoaded(true)
+  }, [])
+
   return (
     <FirebaseProvider value={Firebase}>
       <UserProvider initialState={initialUserState} reducer={userReducer}>
-        <AppContainer />
+        {fontLoaded && <AppContainer />}
       </UserProvider>
     </FirebaseProvider>
   )

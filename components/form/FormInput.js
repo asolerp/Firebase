@@ -1,9 +1,10 @@
 /* eslint react/prop-types: 0 */
 
 import React from 'react'
-import { Input } from 'react-native-elements'
+// import { Input } from 'react-native-elements'
 import { StyleSheet, View, Text } from 'react-native'
 import { Ionicons } from '@expo/vector-icons'
+import { Content, Item, Input, Label, Icon } from 'native-base'
 
 const FormInput = ({
   iconName,
@@ -15,32 +16,42 @@ const FormInput = ({
   label,
   ...rest
 }) => (
-  <View style={styles.inputWrapper}>
-    <Text style={styles.label}>{label}</Text>
-    <Input
-      {...rest}
-      inputContainerStyle={styles.inputStyle}
-      leftIcon={<Ionicons name={iconName} size={28} color={iconColor} />}
-      leftIconContainerStyle={styles.iconStyle}
-      placeholderTextColor="grey"
-      name={name}
-      placeholder={placeholder}
-      placeholderStyle={styles.placeholder}
-      style={styles.input}
-    />
+  <View style={{ marginBottom: 10 }}>
+    <Content>
+      <Label>{label}</Label>
+      <Item>
+        <Input
+          {...rest}
+          inputContainerStyle={styles.inputStyle}
+          placeholderTextColor="grey"
+          name={name}
+          placeholder={placeholder}
+          placeholderStyle={styles.placeholder}
+          style={styles.input}
+        />
+        {/* <Text>cm</Text> */}
+        {/* <Icon name="close-circle" />
+        <Icon name='checkmark-circle' /> */}
+      </Item>
+    </Content>
   </View>
+  // <View style={styles.inputWrapper}>
+  //   <Text style={styles.label}>{label}</Text>
+  //   <Input
+  //     {...rest}
+  //     inputContainerStyle={styles.inputStyle}
+  //     leftIcon={<Ionicons name={iconName} size={28} color={iconColor} />}
+  //     leftIconContainerStyle={styles.iconStyle}
+  //     placeholderTextColor="grey"
+  //     name={name}
+  //     placeholder={placeholder}
+  //     placeholderStyle={styles.placeholder}
+  //     style={styles.input}
+  //   />
+  // </View>
 )
 
 const styles = StyleSheet.create({
-  inputWrapper: {
-    flex: 1,
-    flexDirection: 'row',
-    alignContent: 'center',
-    alignItems: 'center',
-    padding: 0,
-    borderBottomWidth: 1,
-    borderBottomColor: '#aaaaaa',
-  },
   inputStyle: {
     marginRight: 0,
     borderBottomWidth: 0,
@@ -48,15 +59,7 @@ const styles = StyleSheet.create({
     margin: 0,
   },
   input: {
-    fontSize: 10,
-    justifyContent: 'flex-end',
-  },
-  iconStyle: {
-    marginRight: 15,
-    marginLeft: 0,
-  },
-  rightSymbol: {
-    backgroundColor: 'black',
+    fontFamily: 'montserrat',
   },
   label: {
     fontWeight: '400',

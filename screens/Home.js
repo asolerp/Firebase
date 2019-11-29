@@ -21,7 +21,7 @@ function Home(props) {
   }
   return (
     <View style={styles.container}>
-      <Text>Home</Text>
+      <Text style={styles.text}>Home</Text>
       <Text>{user && user.snapshot}</Text>
       <Button
         title="Signout"
@@ -41,6 +41,10 @@ const styles = StyleSheet.create({
     backgroundColor: '#fff',
     alignItems: 'center',
     justifyContent: 'center',
+  },
+  text: {
+    fontFamily: 'montserrat-light',
+    fontSize: 30,
   },
 })
 

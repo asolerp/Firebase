@@ -3,7 +3,6 @@
 import React, { useState, useEffect } from 'react'
 import { AppLoading } from 'expo'
 import { Asset } from 'expo-asset'
-import * as Font from 'expo-font'
 import * as Icon from '@expo/vector-icons'
 import { useDocument } from 'react-firebase-hooks/firestore'
 import firebase from 'firebase'

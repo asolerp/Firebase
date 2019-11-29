@@ -40,6 +40,12 @@ function BlurBackgroundWithAvatar(props) {
       <View style={styles.topBackgroundImage}>
         <Avatar
           rounded
+          editButton={{
+            name: 'photo-camera',
+            type: 'material',
+            color: 'black',
+            underlayColor: '#000',
+          }}
           containerStyle={styles.avatar}
           showEditButton={props.showEditButton}
           onEditPress={props.onEditPress}

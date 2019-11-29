@@ -40,6 +40,10 @@ const styles = StyleSheet.create({
     flex: 3,
     width: '100%',
   },
+  inputsWrapper: {
+    marginLeft: 15,
+    marginRight: 15,
+  },
   avatar: {
     marginTop: 15,
     marginBottom: 10,
@@ -111,119 +115,121 @@ function ProfileForm(props) {
         )}
       </View>
       <View style={styles.formWrapper}>
-        <ScrollView>
-          <Formik
-            initialValues={{ ...user }}
-            onSubmit={(values, actions) => {
-              const { age, name, height, weight, position, foot } = values
-              const { uid } = props.firebase.currentUser()
-              props.firebase
-                .uriToBlob(imgProfile)
-                .then(blob => props.firebase.uploadToFirebase(blob, uid, 'profile'))
-                .then(snapshot => snapshot.ref.getDownloadURL())
-                .then(downloadURL => {
-                  const userData = {
-                    uid,
-                    name,
-                    age,
-                    height,
-                    weight,
-                    position,
-                    foot,
-                    imgProfile: downloadURL,
-                  }
-                  dispatch({
-                    type: 'updateProfile',
-                    userProfile: userData,
+        <ScrollView style={{ marginTop: 10 }}>
+          <View style={styles.inputsWrapper}>
+            <Formik
+              initialValues={{ ...user }}
+              onSubmit={(values, actions) => {
+                const { age, name, height, weight, position, foot } = values
+                const { uid } = props.firebase.currentUser()
+                props.firebase
+                  .uriToBlob(imgProfile)
+                  .then(blob => props.firebase.uploadToFirebase(blob, uid, 'profile'))
+                  .then(snapshot => snapshot.ref.getDownloadURL())
+                  .then(downloadURL => {
+                    const userData = {
+                      uid,
+                      name,
+                      age,
+                      height,
+                      weight,
+                      position,
+                      foot,
+                      imgProfile: downloadURL,
+                    }
+                    dispatch({
+                      type: 'updateProfile',
+                      userProfile: userData,
+                    })
+                    return props.firebase.updateUserProfile(userData)
                   })
-                  return props.firebase.updateUserProfile(userData)
-                })
-            }}
-            validationSchema={validationSchema}
-          >
-            {({
-              handleChange,
-              values,
-              handleSubmit,
-              setFieldValue,
-              errors,
-              isValid,
-              handleBlur,
-              isSubmitting,
-            }) => (
-              <>
-                <FormInput
-                  name="name"
-                  value={values.name}
-                  onChangeText={handleChange('name')}
-                  label="Nombre: "
-                  placeholder="Nombre de jugador"
-                  autoCapitalize="none"
-                  onBlur={handleBlur('name')}
-                />
-                <FormInput
-                  name="age"
-                  value={values.age}
-                  onChangeText={handleChange('age')}
-                  label="Edad: "
-                  placeholder="Edad"
-                  autoCapitalize="none"
-                  onBlur={handleBlur('age')}
-                />
-                <FormInput
-                  name="height"
-                  value={values.height}
-                  onChangeText={handleChange('height')}
-                  label="Altura (cm): "
-                  placeholder="Altura"
-                  onBlur={handleBlur('height')}
-                />
-                <FormInput
-                  name="weight"
-                  value={values.weight}
-                  onChangeText={handleChange('weight')}
-                  label="Peso"
-                  placeholder="Peso (kg)"
-                  onBlur={handleBlur('weight')}
-                />
-                <View style={styles.numericInputs}>
-                  <FormSelect
-                    selectedValue={values.position}
-                    label="Posición"
-                    values={positions}
-                    placeholder={{
-                      label: 'Posición',
-                      value: null,
-                      color: '#9EA0A4',
-                    }}
-                    mode="dialog"
-                    onValueChange={itemValue => setFieldValue('position', itemValue)}
+              }}
+              validationSchema={validationSchema}
+            >
+              {({
+                handleChange,
+                values,
+                handleSubmit,
+                setFieldValue,
+                errors,
+                isValid,
+                handleBlur,
+                isSubmitting,
+              }) => (
+                <>
+                  <FormInput
+                    name="name"
+                    value={values.name}
+                    onChangeText={handleChange('name')}
+                    label="Nombre"
+                    placeholder="Nombre de jugador"
+                    autoCapitalize="none"
+                    onBlur={handleBlur('name')}
                   />
-                  <FormSelect
-                    selectedValue={values.foot}
-                    placeholder={{
-                      label: 'Pierna principal',
-                      value: null,
-                      color: '#9EA0A4',
-                    }}
-                    label="Pierna"
-                    values={foot}
-                    onValueChange={itemValue => setFieldValue('foot', itemValue)}
+                  <FormInput
+                    name="age"
+                    value={values.age}
+                    onChangeText={handleChange('age')}
+                    label="Edad"
+                    placeholder="Edad"
+                    autoCapitalize="none"
+                    onBlur={handleBlur('age')}
                   />
-                </View>
-                <View style={styles.buttonContainer}>
-                  <FormButton
-                    onPress={handleSubmit}
-                    title="Editar"
-                    buttonColor="#039BE5"
-                    disabled={!isValid}
-                    loading={isSubmitting}
+                  <FormInput
+                    name="height"
+                    value={values.height}
+                    onChangeText={handleChange('height')}
+                    label="Altura (cm)"
+                    placeholder="Altura"
+                    onBlur={handleBlur('height')}
                   />
-                </View>
-                <ErrorMessage errorValue={errors.general} />
-              </>
-            )}
-          </Formik>
+                  <FormInput
+                    name="weight"
+                    value={values.weight}
+                    onChangeText={handleChange('weight')}
+                    label="Peso"
+                    placeholder="Peso (kg)"
+                    onBlur={handleBlur('weight')}
+                  />
+                  <View style={styles.numericInputs}>
+                    <FormSelect
+                      selectedValue={values.position}
+                      label="Posición"
+                      values={positions}
+                      placeholder={{
+                        label: 'Posición',
+                        value: null,
+                        color: '#9EA0A4',
+                      }}
+                      mode="dialog"
+                      onValueChange={itemValue => setFieldValue('position', itemValue)}
+                    />
+                    <FormSelect
+                      selectedValue={values.foot}
+                      placeholder={{
+                        label: 'Pierna principal',
+                        value: null,
+                        color: '#9EA0A4',
+                      }}
+                      label="Pierna"
+                      values={foot}
+                      onValueChange={itemValue => setFieldValue('foot', itemValue)}
+                    />
+                  </View>
+                  <View style={styles.buttonContainer}>
+                    <FormButton
+                      onPress={handleSubmit}
+                      title="Editar"
+                      buttonColor="#039BE5"
+                      disabled={!isValid}
+                      loading={isSubmitting}
+                    />
+                  </View>
+                  <ErrorMessage errorValue={errors.general} />
+                </>
+              )}
+            </Formik>
+          </View>
         </ScrollView>
       </View>
     </View>
