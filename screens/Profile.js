@@ -6,6 +6,7 @@ import firebase from 'firebase'
 import { withFirebaseHOC } from '../config/Firebase'
 import BlurBackgroundWithAvatar from '../components/BlurBackgroundWithAvatar'
 import useUser from '../hooks/useUser'
+import { POSITIONS, MAIN_FOOT } from '../utils/constants/Player'
 
 const styles = StyleSheet.create({
   container: {
@@ -29,6 +30,14 @@ const styles = StyleSheet.create({
 function Profile(props) {
   const { error, loading, user } = useUser(props.firebase.currentUser().uid)
 
+  const getPositon = () => {
+    return POSITIONS.find(position => position.value === user.data().position)
+  }
+
+  const getMainFoot = () => {
+    return MAIN_FOOT.find(foot => foot.value === user.data().foot)
+  }
+
   return (
     <View style={styles.container}>
       <View style={styles.topWrapper}>
@@ -37,7 +46,7 @@ function Profile(props) {
             backgroundUrl={user.data().imgProfile}
             avatarUrl={user.data().imgProfile}
             title={user.data().name}
-            subtitle={user.data().position}
+            subtitle={getPositon().label}
             size="xlarge"
           />
         )}
