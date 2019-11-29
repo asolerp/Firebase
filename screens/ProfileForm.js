@@ -49,9 +49,8 @@ const styles = StyleSheet.create({
     marginBottom: 10,
   },
   numericInputs: {
-    width: '100%',
     flexDirection: 'row',
-    justifyContent: 'flex-start',
+    justifyContent: 'space-between',
   },
 })
 
@@ -143,6 +142,7 @@ function ProfileForm(props) {
                     })
                     return props.firebase.updateUserProfile(userData)
                   })
+                  .then(() => props.navigation.navigate('Profile'))
               }}
               validationSchema={validationSchema}
             >
@@ -195,24 +195,29 @@ function ProfileForm(props) {
                     <FormSelect
                       selectedValue={values.position}
                       label="Posición"
+                      iconColor="black"
+                      iconSize="15"
+                      iconName="ios-arrow-down"
                       values={positions}
                       placeholder={{
                         label: 'Posición',
                         value: null,
                         color: '#9EA0A4',
                       }}
-                      mode="dialog"
                       onValueChange={itemValue => setFieldValue('position', itemValue)}
                     />
                     <FormSelect
                       selectedValue={values.foot}
+                      label="Pierna"
+                      iconColor="black"
+                      iconSize="15"
+                      iconName="ios-arrow-down"
+                      values={foot}
                       placeholder={{
                         label: 'Pierna principal',
                         value: null,
                         color: '#9EA0A4',
                       }}
-                      label="Pierna"
-                      values={foot}
                       onValueChange={itemValue => setFieldValue('foot', itemValue)}
                     />
                   </View>

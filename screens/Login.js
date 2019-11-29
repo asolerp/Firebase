@@ -16,9 +16,13 @@ import { useStateValue } from '../config/User/UserContextManagement'
 
 const styles = StyleSheet.create({
   container: {
-    flex: 1,
+    width: '100%',
     backgroundColor: '#fff',
     marginTop: 50,
+  },
+  inputsWrapper: {
+    width: '100%',
+    flexDirection: 'column',
   },
   logoContainer: {
     marginBottom: 15,
@@ -43,7 +47,6 @@ const validationSchema = Yup.object().shape({
 function Login(props) {
   const [passwordVisibility, setPasswordVisibility] = useState(true)
   const [rightIcon, setRightIcon] = useState('ios-eye')
-  const [{ user }, dispatch] = useStateValue()
 
   const goToSignup = () => props.navigation.navigate('Signup')
 
@@ -57,11 +60,6 @@ function Login(props) {
     try {
       const response = await props.firebase.loginWithEmail(email, password)
       if (response.user) {
-        const userProfile = await props.firebase.getUserProfile(response.user.uid)
-        dispatch({
-          type: 'updateProfile',
-          userProfile: userProfile.data(),
-        })
         props.navigation.navigate('App')
       }
     } catch (error) {
@@ -72,7 +70,7 @@ function Login(props) {
   }
 
   return (
-    <SafeAreaView style={styles.container}>
+    <View style={styles.container}>
       <HideWithKeyboard style={styles.logoContainer}>
         <AppLogo />
       </HideWithKeyboard>
@@ -143,7 +141,7 @@ function Login(props) {
         }}
         type="clear"
       />
-    </SafeAreaView>
+    </View>
   )
 }
 

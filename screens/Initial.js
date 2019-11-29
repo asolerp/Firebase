@@ -3,6 +3,7 @@
 import React, { useState, useEffect } from 'react'
 import { AppLoading } from 'expo'
 import { Asset } from 'expo-asset'
+import * as Font from 'expo-font'
 import * as Icon from '@expo/vector-icons'
 import { useDocument } from 'react-firebase-hooks/firestore'
 import firebase from 'firebase'
@@ -50,6 +51,7 @@ function Initial(props) {
       Asset.loadAsync([require('../assets/panama.png'), require('../assets/icon.png')]),
       Font.loadAsync({
         ...Icon.Ionicons.font,
+        'montserrat-regular': require('../assets/fonts/Montserrat-Regular.ttf'),
       }),
     ])
   }

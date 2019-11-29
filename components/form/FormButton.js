@@ -6,8 +6,8 @@ const FormButton = ({ title, buttonType, buttonColor, ...rest }) => (
     {...rest}
     type={buttonType}
     title={title}
-    buttonStyle={{ borderColor: buttonColor, borderRadius: 20 }}
-    titleStyle={{ color: buttonColor }}
+    buttonStyle={{ borderColor: buttonColor, borderRadius: 0 }}
+    titleStyle={{ color: 'white' }}
   />
 )
 

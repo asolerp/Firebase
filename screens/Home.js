@@ -43,8 +43,8 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
   },
   text: {
-    fontFamily: 'montserrat-light',
     fontSize: 30,
+    fontFamily: 'montserrat-regular',
   },
 })
 

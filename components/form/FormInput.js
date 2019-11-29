@@ -1,10 +1,9 @@
 /* eslint react/prop-types: 0 */
 
-import React from 'react'
-// import { Input } from 'react-native-elements'
-import { StyleSheet, View, Text } from 'react-native'
-import { Ionicons } from '@expo/vector-icons'
-import { Content, Item, Input, Label, Icon } from 'native-base'
+import React from "react";
+import { Input } from "react-native-elements";
+import { StyleSheet, View, Text } from "react-native";
+// import { Content, Item, Input, Label, Icon } from 'native-base'
 
 const FormInput = ({
   iconName,
@@ -16,62 +15,45 @@ const FormInput = ({
   label,
   ...rest
 }) => (
-  <View style={{ marginBottom: 10 }}>
-    <Content>
-      <Label>{label}</Label>
-      <Item>
-        <Input
-          {...rest}
-          inputContainerStyle={styles.inputStyle}
-          placeholderTextColor="grey"
-          name={name}
-          placeholder={placeholder}
-          placeholderStyle={styles.placeholder}
-          style={styles.input}
-        />
-        {/* <Text>cm</Text> */}
-        {/* <Icon name="close-circle" />
-        <Icon name='checkmark-circle' /> */}
-      </Item>
-    </Content>
+  <View style={styles.inputWrapper}>
+    <Text style={styles.label}>{label}</Text>
+    <Input
+      {...rest}
+      inputContainerStyle={styles.inputStyle}
+      inputStyle={styles.input}
+      placeholderTextColor="grey"
+      name={name}
+      placeholder={placeholder}
+    />
   </View>
-  // <View style={styles.inputWrapper}>
-  //   <Text style={styles.label}>{label}</Text>
-  //   <Input
-  //     {...rest}
-  //     inputContainerStyle={styles.inputStyle}
-  //     leftIcon={<Ionicons name={iconName} size={28} color={iconColor} />}
-  //     leftIconContainerStyle={styles.iconStyle}
-  //     placeholderTextColor="grey"
-  //     name={name}
-  //     placeholder={placeholder}
-  //     placeholderStyle={styles.placeholder}
-  //     style={styles.input}
-  //   />
-  // </View>
-)
+);
 
 const styles = StyleSheet.create({
+  inputWrapper: {
+    marginBottom: 15,
+    borderWidth: 1,
+    borderColor: "#aaaaaa",
+    padding: 5
+  },
   inputStyle: {
-    marginRight: 0,
     borderBottomWidth: 0,
-    padding: 0,
-    margin: 0,
+    height: 25
   },
   input: {
-    fontFamily: 'montserrat',
+    fontSize: 15,
+    margin: 0,
+    height: 10,
+    padding: 0,
+    fontFamily: "montserrat-regular"
   },
   label: {
-    fontWeight: '400',
-    color: '#B6B6B6',
+    fontWeight: "400",
+    color: "#B6B6B6",
     marginLeft: 10,
+    marginBottom: 0,
     fontSize: 15,
-    width: '30%',
-  },
-  placeholder: {
-    fontSize: 10,
-    color: '#aaaaaa',
-  },
-})
+    fontFamily: "montserrat-regular"
+  }
+});
 
-export default FormInput
+export default FormInput;
